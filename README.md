@@ -2,8 +2,6 @@
 
 A multimodal deep learning system that predicts property prices by combining tabular data with satellite imagery.
 
-**Reference**: Based on [D3vutkarsh/satellite-property-valuation](https://github.com/D3vutkarsh/satellite-property-valuation)
-
 ## Overview
 
 This project implements a **Multimodal Regression Pipeline** that predicts property market value using:
@@ -22,8 +20,11 @@ satval/
 ├── data_fetcher.py          # Satellite image download script
 ├── preprocessing.ipynb      # Data cleaning and EDA
 ├── model_training.ipynb     # Multimodal model training
+├── code_with_output.ipynb   # Complete notebook containing code with outputs
 ├── README.md                # This file
 │
+|
+|(Below directories will be added once you run the code_with_output.ipynb file)
 ├── data/
 │   ├── raw/                 # Original Excel files
 │   ├── processed/           # Processed CSV files
@@ -37,8 +38,13 @@ satval/
     ├── meta_learner.pkl
     └── gradcam_samples.png
 ```
+## Setup Guide (Kaggle) - Option- A
 
-## Quick Start (Kaggle)
+Directly go to below link and run the notebook. I have already downloaded the images which exists in /kaggle/working directory, so it will take less time to run. Make sure the accelerator is selected to GPU T4 X2.
+
+https://www.kaggle.com/code/mohitagarwal24/satellite-imagery-based-property-valuation 
+
+## Setup Guide (Kaggle) - Option- B
 
 ### 1. Create Kaggle Notebook
 - Go to [kaggle.com/code](https://www.kaggle.com/code)
@@ -48,10 +54,21 @@ satval/
 - Download [train.xlsx](https://1drv.ms/x/c/8cf6803adf7941c3/IQBue1q4w4TETL_7xWMGhcD_AejALtdsXTBejVUjRA9qeM8?e=kWdglC) and [test.xlsx](https://1drv.ms/x/c/8cf6803adf7941c3/IQAwCVfSggmjQ4DJH51zJK-tARwRQWE9fl0bPlwo1mRF2PQ?e=h3frFB)
 - Upload to Kaggle or add as dataset
 
-### 3. Set API Key
+### 3. Initial Setup
 ```python
 import os
-os.environ['GOOGLE_MAPS_API_KEY'] = 'your_api_key_here'
+from pathlib import Path
+
+# Create directories
+for d in ['data/raw', 'data/processed', 'data/images/train', 'data/images/test', 'models']:
+    Path(d).mkdir(parents=True, exist_ok=True)
+
+# Copy data (after uploading to Kaggle)
+!cp /kaggle/input/*/*.xlsx data/raw/
+
+# Set your API key
+os.environ['GOOGLE_MAPS_API_KEY'] = 'YOUR_GOOGLE_MAPS_API_KEY'
+os.environ['GOOGLE_MAPS_SIGNING_SECRET'] = 'YOUR_SIGNING_SECRET'
 ```
 
 ### 4. Run Notebooks
@@ -92,11 +109,10 @@ os.environ['GOOGLE_MAPS_API_KEY'] = 'your_api_key_here'
 
 | Model | Val RMSE | Val R² |
 |-------|----------|--------|
-| XGBoost (Tabular) | ~0.18 | ~0.88 |
-| ResNet18 (Image) | ~0.25 | - |
-| **Stacking (Fusion)** | **~0.16** | **~0.90** |
+| XGBoost (Tabular) | ~0.166 | ~0.897 |
+| ResNet18 (Image) | ~0.351 | ~0.552 |
+| **Stacking (Fusion)** | **~0.159** | **~0.910** |
 
-*RMSE in log space*
 
 ## Model Explainability
 
@@ -119,34 +135,13 @@ Grad-CAM is used to visualize which image regions influence predictions:
 - living_lot_ratio, quality_score
 - is_luxury, has_basement, and more
 
-## Submission Files
-
-1. **Prediction CSV**: `enrollno_final.csv`
-   - Format: `id, predicted_price`
-
-2. **Report PDF**: `enrollno_report.pdf`
-   - EDA visualizations
-   - Architecture diagram
-   - Model comparison results
-   - Grad-CAM examples
-
-3. **Code Repository**:
-   - data_fetcher.py
-   - preprocessing.ipynb
-   - model_training.ipynb
-   - README.md
-
 ## API Setup
 
 ### Google Maps Static API
 1. Go to [Google Cloud Console](https://console.cloud.google.com/)
 2. Create project → Enable "Maps Static API"
 3. Create API key → Enable billing
-4. Cost: ~$50 (covered by $200/month free credit)
 
-```python
-os.environ['GOOGLE_MAPS_API_KEY'] = 'your_key'
-```
 
 ## Dependencies
 
@@ -163,14 +158,4 @@ opencv-python>=4.8.0
 tqdm>=4.65.0
 openpyxl>=3.1.0
 ```
-
-## License
-
-MIT License
-
-## Acknowledgments
-
-- Dataset: King County House Sales
-- Reference: [D3vutkarsh/satellite-property-valuation](https://github.com/D3vutkarsh/satellite-property-valuation)
-- Satellite Imagery: Google Maps Static API
 
