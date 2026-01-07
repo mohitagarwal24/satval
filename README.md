@@ -46,6 +46,7 @@ Notebook - https://www.kaggle.com/code/mohitagarwal24/cdc-satellite-imagery-base
 
 If you wish not to download images then I have made data uploaded to kaggle as well which can be accessed below for direct use, but these must be copied to /kaggle/working directory and should look like as follows:
 <img width="279" height="328" alt="image" src="https://github.com/user-attachments/assets/b4450a84-b319-40be-9ed6-bdeea53a888c" />
+
 Dataset - https://www.kaggle.com/datasets/mohitagarwal24/cdc-satellite-image-based-property-valuation-data
 
 ## Setup Guide (Kaggle) - Option- B
